@@ -1,0 +1,1 @@
+def call() { stage('Test') { echo "Running tests..." sh 'mvn test' } }
