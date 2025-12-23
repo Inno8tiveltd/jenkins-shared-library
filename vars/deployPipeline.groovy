@@ -17,7 +17,7 @@ def call() {
             envFile: '.env.stage'
         )
     }
-    else if (branch == 'main') {
+    else if (branch == 'main' || branch == 'prod') {
         deploy(
             envName: 'prod',
             server: 'ec2-user@PROD_SERVER_IP',
