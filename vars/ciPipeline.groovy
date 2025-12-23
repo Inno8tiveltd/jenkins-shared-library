@@ -19,11 +19,12 @@ def call() {
 
 
     pushToRegistry(this, [
-        registry      : env.NEXUS_REGISTRY,
-        repo          : env.NEXUS_REPO,
-        backendImage  : env.BACKEND_IMAGE,
-        frontendImage : env.FRONTEND_IMAGE,
-        tag           : env.IMAGE_TAG,
-        credsId       : 'nexus-docker-creds'
-    ])
+    registry          : env.NEXUS_REGISTRY,
+    repo              : env.NEXUS_REPO,
+    backendImage      : 'node-backend',
+    frontendImage     : 'node-frontend',
+    userFrontendImage : 'user-frontend',   // 🔥 THIS WAS NULL
+    tag               : env.IMAGE_TAG,      // 🔥 MAKE SURE THIS IS NOT NULL
+    credsId           : 'nexus-docker-creds'
+])
 }
