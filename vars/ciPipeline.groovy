@@ -10,11 +10,11 @@ def call() {
     )
 
     dockerBuild(
-        this,
-        env.BACKEND_IMAGE,
-        env.FRONTEND_IMAGE,
-        env.IMAGE_TAG
-    )
+    backend: env.BACKEND_IMAGE,
+    frontend: env.FRONTEND_IMAGE,
+    userFrontend: env.USER_FRONTEND_IMAGE,
+    tag: env.IMAGE_TAG
+)
 
     pushToRegistry(this, [
         registry      : env.NEXUS_REGISTRY,

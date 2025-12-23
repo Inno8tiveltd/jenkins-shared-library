@@ -1,14 +1,18 @@
-def call(steps, backend, frontend, userFrontend, tag) {
+def call(Map config) {
 
-    steps.stage('Build Backend') {
-        steps.sh "docker build -t ${backend}:${tag} backend"
+    def tag = config.tag ?: 'latest'
+
+    stage('Build Backend') {
+        sh "docker build -t ${config.backend}:${tag} backend"
     }
 
-    steps.stage('Build Frontend') {
-        steps.sh "docker build -t ${frontend}:${tag} frontend"
+    stage('Build Frontend') {
+        sh "docker build -t ${config.frontend}:${tag} frontend"
     }
 
-    steps.stage('Build User Frontend') {
-        steps.sh "docker build -t ${userFrontend}:${tag} user-portal-frontend"
+    if (config.userFrontend) {
+        stage('Build User Frontend') {
+            sh "docker build -t ${config.userFrontend}:${tag} user-portal-frontend"
+        }
     }
 }
