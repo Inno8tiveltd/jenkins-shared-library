@@ -11,11 +11,12 @@ def call() {
 
     dockerBuild(
     this,
-    'node-backend',
-    'node-frontend',
-    'user-frontend',
-    env.BRANCH_NAME ?: 'latest'  // use branch name as tag
+    env.BACKEND_IMAGE,
+    env.FRONTEND_IMAGE,
+    env.USER_FRONTEND_IMAGE,
+    env.IMAGE_TAG
 )
+
 
 
 
