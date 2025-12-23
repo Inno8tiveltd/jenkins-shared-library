@@ -28,15 +28,6 @@ def call() {
 
         echo "Deploying branch ${branch} to ${serverIP}"
 
-        // SSH agent with your PEM key
-        sshagent(credentials: ['ec2-ssh-key']) {
-            sh """
-            ssh -o StrictHostKeyChecking=no ec2-user@${serverIP} '
-                cd /home/ec2-user/node-app &&
-                docker compose --env-file ${envFile} pull &&
-                docker compose --env-file ${envFile} up -d
-            '
-            """
-        }
+
     }
 }
