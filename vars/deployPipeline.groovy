@@ -6,11 +6,9 @@ def call() {
         string(credentialsId: 'DEV_SERVER_IP', variable: 'DEV_IP'),
         string(credentialsId: 'STAGE_SERVER_IP', variable: 'STAGE_IP'),
         string(credentialsId: 'PROD_SERVER_IP', variable: 'PROD_IP'),
-        usernamePassword(
-            credentialsId: 'nexus-docker-creds',
-            usernameVariable: 'NEXUS_USER',
-            passwordVariable: 'NEXUS_PASSWORD'
-        )
+        usernamePassword(credentialsId: 'nexus-docker-creds',
+                         usernameVariable: 'NEXUS_USER',
+                         passwordVariable: 'NEXUS_PASSWORD')
     ]) {
 
         def serverIP
