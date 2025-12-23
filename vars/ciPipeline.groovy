@@ -14,8 +14,9 @@ def call() {
     'node-backend',
     'node-frontend',
     'user-frontend',
-    env.IMAGE_TAG
+    env.BRANCH_NAME ?: 'latest'  // use branch name as tag
 )
+
 
 
     pushToRegistry(this, [
