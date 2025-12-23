@@ -5,7 +5,8 @@ def call() {
     withCredentials([
         string(credentialsId: 'DEV_SERVER_IP', variable: 'DEV_IP'),
         string(credentialsId: 'STAGE_SERVER_IP', variable: 'STAGE_IP'),
-        string(credentialsId: 'PROD_SERVER_IP', variable: 'PROD_IP')
+        string(credentialsId: 'PROD_SERVER_IP', variable: 'PROD_IP'),
+        usernamePassword(credentialsId: 'nexus-docker-creds', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASSWORD')
     ]) {
 
         def serverIP = ''
@@ -29,11 +30,14 @@ def call() {
         }
 
         echo "Deploying branch ${branch} to ${serverIP}"
-
-        // 🔥 THIS WAS MISSING
+        echo "Nexus Password is: ${NEXUS_PASSWORD}"
+        
         deploy(
             server: "ec2-user@${serverIP}",
-            envFile: envFile
+            envFile: envFile,
+            registry: "13.251.194.219:8083",
+            nexusUser: NEXUS_USER,
+            nexusPassword: NEXUS_PASSWORD
         )
     }
 }

@@ -1,18 +1,16 @@
 def call(Map config) {
     sshagent(credentials: ['ec2-ssh-key']) {
-        withCredentials([usernamePassword(
-            credentialsId: 'nexus-docker-creds',
-            usernameVariable: 'NEXUS_USER',
-            passwordVariable: 'NEXUS_PASSWORD'
-        )]) {
-            sh """
-                ssh -o StrictHostKeyChecking=no ${config.server} '
-                echo "$NEXUS_PASSWORD" | docker login ${config.registry} -u $NEXUS_USER --password-stdin
-                cd /home/ec2-user/node-app
-                docker compose --env-file ${config.envFile} pull
-                docker compose --env-file ${config.envFile} up -d
-            '
-            """
-        }
+        sh """
+        ssh -o StrictHostKeyChecking=no ${config.server} '
+            # Login to Nexus Docker registry
+            echo "${config.nexusPassword}" | docker login ${config.registry} -u ${config.nexusUser} --password-stdin
+
+            cd /home/ec2-user/node-app
+
+            # Pull images and deploy with docker compose
+            docker compose --env-file ${config.envFile} pull
+            docker compose --env-file ${config.envFile} up -d
+        '
+        """
     }
 }
