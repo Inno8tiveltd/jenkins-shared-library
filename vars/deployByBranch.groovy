@@ -1,27 +1,17 @@
-def call(String branch) {
+def call() {
+    def branch = env.BRANCH_NAME
+    def build = env.BUILD_NUMBER
+    def shortSha = env.GIT_COMMIT?.take(7)
 
-```
-def envMap = [
-    dev  : [host: 'DEV_SERVER_IP',   envFile: '.env.dev'],
-    stage: [host: 'STAGE_SERVER_IP', envFile: '.env.stage'],
-    main : [host: 'PROD_SERVER_IP',  envFile: '.env.prod']
-]
+    if (branch == 'dev') {
+        return "dev-${build}"
+    }
+    if (branch == 'stage') {
+        return "stage-${build}"
+    }
+    if (branch == 'main' || branch == 'prod') {
+        return "prod-${shortSha}"
+    }
 
-def cfg = envMap[branch]
-if (!cfg) {
-    echo "No deployment configured for branch: ${branch}"
-    return
-}
-
-sshagent(['jenkins-ssh-key']) {
-    sh """
-    ssh ec2-user@${cfg.host} << EOF
-      cd /opt/node-app
-      docker compose --env-file ${cfg.envFile} pull
-      docker compose --env-file ${cfg.envFile} up -d
-    EOF
-    """
-}
-```
-
+    error "Unsupported branch: ${branch}"
 }
