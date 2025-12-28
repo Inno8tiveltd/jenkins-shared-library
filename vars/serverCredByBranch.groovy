@@ -1,12 +1,21 @@
 def call() {
-    if (env.BRANCH_NAME == 'dev') {
+    def branch = env.BRANCH_NAME?.trim()
+
+    echo "🔍 Raw BRANCH_NAME = '${branch}'"
+
+    if (branch == 'dev') {
         return 'DEV_SERVER_IP'
     }
-    if (env.BRANCH_NAME == 'stage') {
+    if (branch == 'stage') {
         return 'STAGE_SERVER_IP'
     }
-    if (env.BRANCH_NAME == 'prod') {
+    if (branch == 'prod') {
         return 'PROD_SERVER_IP'
     }
-    error "Unsupported branch: ${env.BRANCH_NAME}"
+
+    error """
+❌ Unsupported branch detected
+Expected : dev | stage | prod
+Actual   : ${branch}
+"""
 }

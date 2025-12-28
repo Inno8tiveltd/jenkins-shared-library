@@ -1,12 +1,15 @@
 def call() {
-    if (env.BRANCH_NAME == 'dev') {
+    def branch = env.BRANCH_NAME?.trim()
+
+    if (branch == 'dev') {
         return 'dev-latest'
     }
-    if (env.BRANCH_NAME == 'stage') {
+    if (branch == 'stage') {
         return 'stage-latest'
     }
-    if (env.BRANCH_NAME == 'prod') {
-        return env.BUILD_NUMBER
+    if (branch == 'prod') {
+        return 'prod-latest'
     }
-    error "Unsupported branch: ${env.BRANCH_NAME}"
+
+    error "Unsupported branch for tagging: ${branch}"
 }

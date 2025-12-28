@@ -1,6 +1,10 @@
 def call() {
+    echo "🚀 Deploy triggered for branch: ${env.BRANCH_NAME}"
+
     def tag = deployByBranch()
     def serverCredId = serverCredByBranch()
+
+    echo "🔐 Using credential ID: ${serverCredId}"
 
     withCredentials([
         string(credentialsId: serverCredId, variable: 'TARGET_SERVER')
