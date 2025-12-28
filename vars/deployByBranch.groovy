@@ -1,17 +1,12 @@
-def call() {
-    def branch = env.BRANCH_NAME
-    def build = env.BUILD_NUMBER
-    def shortSha = env.GIT_COMMIT?.take(7)
-
-    if (branch == 'dev') {
-        return "dev-${build}"
+def deployByBranch() {
+    if (env.BRANCH_NAME == 'dev') {
+        return [ env: 'dev', serverCred: 'DEV_SERVER_IP', tag: "dev-${env.BUILD_NUMBER}" ]
     }
-    if (branch == 'stage') {
-        return "stage-${build}"
+    if (env.BRANCH_NAME == 'stage') {
+        return [ env: 'stage', serverCred: 'STAGE_SERVER_IP', tag: "stage-${env.BUILD_NUMBER}" ]
     }
-    if (branch == 'main' || branch == 'prod') {
-        return "prod-${shortSha}"
+    if (env.BRANCH_NAME == 'main') {
+        return [ env: 'prod', serverCred: 'PROD_SERVER_IP', tag: "prod-${env.BUILD_NUMBER}" ]
     }
-
-    error "Unsupported branch: ${branch}"
+    error "Unsupported branch: ${env.BRANCH_NAME}"
 }
