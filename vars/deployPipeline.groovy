@@ -1,6 +1,6 @@
 def call() {
     def tag = deployByBranch()
-    def serverCredId = resolveTargetServer()
+    def serverCredId = serverCredByBranch()
 
     withCredentials([
         string(credentialsId: serverCredId, variable: 'TARGET_SERVER')
