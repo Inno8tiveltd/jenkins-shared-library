@@ -1,11 +1,11 @@
 def call() {
-    echo "🚀 Deploy triggered for branch: ${env.BRANCH_NAME}"
+    echo "Deploy triggered for branch: ${env.BRANCH_NAME}"
 
     // Get image tag & server credential ID
     def tag = deployByBranch()
     def serverCredId = serverCredByBranch()
 
-    echo "🔐 Using credential ID: ${serverCredId}"
+    echo " Using credential ID: ${serverCredId}"
 
     // Bind all credentials here
     withCredentials([
