@@ -1,0 +1,40 @@
+@Library('ci-lib') _
+
+pipeline {
+    agent any
+
+    environment {
+        NEXUS_REGISTRY = "13.251.194.219:8083"
+        NEXUS_REPO     = "docker-hosted"
+
+        BACKEND_IMAGE  = "node-backend"
+        FRONTEND_IMAGE = "node-frontend"
+        IMAGE_TAG      = "${BUILD_NUMBER}"
+
+        SONAR_ORG = "sonar00732"
+        SONAR_KEY = "sonar00732-NodeJS-Application"
+    }
+
+    stages {
+        stage('CI Pipeline') {
+            steps {
+                script {
+                    buildStage(this)
+
+                    sonarScan(this, env.SONAR_KEY, env.SONAR_ORG, 'frontend,backend')
+
+                    dockerBuild(this, env.BACKEND_IMAGE, env.FRONTEND_IMAGE, env.IMAGE_TAG)
+
+                    pushToRegistry(this, [
+                        registry: env.NEXUS_REGISTRY,
+                        repo: env.NEXUS_REPO,
+                        backendImage: env.BACKEND_IMAGE,
+                        frontendImage: env.FRONTEND_IMAGE,
+                        tag: env.IMAGE_TAG,
+                        credsId: 'nexus-docker-creds'
+                    ])
+                }
+            }
+        }
+    }
+}
